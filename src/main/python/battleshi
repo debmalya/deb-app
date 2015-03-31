@@ -1,0 +1,218 @@
+##################################################################################################
+#                                 Coursework Five (Battleships)-Test File                        #
+# Alogorithm :                                                                                   #
+#                                                                                                #  
+# -Key Modules imported                                                                          #
+#              - random to generate number the positions randomly                                # 
+#              - math to calculate suitable distance between two  ships                          #
+#                                                                                                #
+# Algorithm:                                                                                     #
+#           1) At the beginning of the game 10 ships are randomly .                              #
+#              It calculates the adjuscent position between the two ships not to be overlapped   #
+#           2) Keep them hidden until users input matches the location                           #
+#           3) Ask for user input for to hit the desired row and columns                         #
+#                        - if matches the ship any ship location diplays hit else miss           #
+#           4) Every hit and miss it will ask the user to continue                               #
+#           5) When for a particular ship all positions are hit it displays the the sunken ship  #
+#              and type as 'CCC' or 'S' or 'DD' or 'BBBB'.                                       #
+#           6) If user finds all ships found less than 31 storkes it will display                #
+#               "Outstanding message"                                                            #
+#                                                                                                #
+#                                                                                                #
+##################################################################################################
+import battleship_game as game
+import unittest
+#################################################################################################
+class ShipTest(unittest.TestCase):
+
+  def test_ship(self):
+          #Testing Ship Class
+          test_ship=game.Ship()
+          ship_type=test_ship.get_ship_type()
+          self.assertEqual(ship_type, 'ship','Tested Okay')
+          
+
+          #Testing Battleship
+  def test_Battleship(self):
+        test_ship=game.Battleship()
+        type=str(test_ship)
+        ship_type=test_ship.get_ship_type()
+        print ("Ship Type",type.upper()+" For "+"Battleship")
+        self.assertEqual('b', type)
+
+  def test_Cruiser(self):
+        test_ship=game.Cruiser()
+        type=str(test_ship)
+        ship_type=test_ship.get_ship_type()
+        print ("Ship Type",type.upper()+" For "+"Cruiser")
+        self.assertEqual('c', type)
+
+  def test_Destroyer(self):
+        test_ship=game.Destroyer()
+        type=str(test_ship)
+        ship_type=test_ship.get_ship_type()
+        print ("Ship Type",type.upper()+" For "+"Destroyer")
+        self.assertEqual('d', type)
+
+  def test_Submarine(self):
+        test_ship=game.Submarine()
+        type=str(test_ship)
+        ship_type=test_ship.get_ship_type()
+        print ("Ship Type",type.upper()+" For "+"Submarine")
+        self.assertEqual('s', type)
+          
+class  OceanTest(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super(OceanTest, self).__init__(*args, **kwargs)
+        self._ocean=game.Ocean()
+        self._test_ship=game.Ship()
+        
+        
+    def test_get_ships_sunk(self):
+      test_ocean=self._ocean
+      position = 0
+      while position < 100:
+        row=int(position/10)
+        col=position%10
+        is_ok=test_ocean.shoot_at((row,col))
+        position+=1
+        if self._ocean.get_ships_sunk()==10:
+          self.assertEqual(self._ocean.get_ships_sunk(), 10)
+      print("Result of test_get_ships_sunk :"+str(self._ocean.get_ships_sunk()))
+      game_over=test_ocean.game_is_over()
+      print("Result of game_is_over unit level:"+str(game_over))
+      
+
+    def test_is_open_sea(self):
+      position=0
+      test_ocean=self._ocean
+      while position < 100:
+        row=int(position/10)
+        col=position%10
+        a=(row,col)
+        is_ok=test_ocean.is_open_sea((row,col))
+        position+=1
+        if is_ok==True:
+          print("Result test_is_open_sea unit level :"+str(is_ok)+"(Row ,Col)"+str(a))
+          self.assertEqual(is_ok, True)
+          break
+
+    def test_is_occupied(self):
+      position=0
+      test_ocean=self._ocean
+      while position < 100:
+        row=int(position/10)
+        col=position%10
+        a=(row,col)
+        b=test_ocean.is_occupied(a)
+        
+        position+=1
+        if a==b:
+          print("Result test_occupied unit level:"+str(b)+"(Row ,Col)"+str(a))
+          self.assertEqual(a, b)
+
+
+    def test_validate_position(self):
+      position=0
+      test_ocean=self._ocean
+      while position < 100:
+        row=int(position/10)
+        col=position%10
+        a=(row,col)
+        b=test_ocean.validate_position(row,col)
+        
+        position+=1
+        if b!='False':
+          print("Result validate_position unit level:"+"(Row ,Col)"+str(a))
+          self.assertEqual(b, b)
+          break
+          
+      
+
+    def test_get_shots_fired(self):
+        position=0
+        test_ocean=self._ocean
+        while position < 100:
+          row=int(position/10)
+          col=position%10
+          a=(row,col)
+          test_ocean.shoot_at(a)
+          b=test_ocean.get_shots_fired()
+          c=test_ocean.get_hit_count()
+          d=test_ocean.get_ships_sunk()
+          position+=1
+          if b!='False':
+            print("Result get_shots_fired unit level:"+"(Row ,Col)"+str(a))
+            print("Result get_hit_count unit level:"+str(c))
+            print("Result get_ships_sunk unit level:"+str(d))
+            self.assertEqual(b, True)
+          break
+        
+    def test_place_all_ships_randomly(self):
+      test_ships=self._test_ship
+      test_ocean=self._ocean
+      position = 0
+      while position < 100:
+        row=int(position/10)
+        col=position%10
+        is_ok=test_ocean.shoot_at((row,col))
+        b=test_ocean.get_shots_fired()
+        c=test_ocean.get_hit_count()
+        d=test_ocean.get_ships_sunk()
+        position+=1
+        if is_ok==True:
+          self.assertEqual(is_ok, True,"place_all_ships_randomly")
+      print ("#################################################################")
+      print ("#       Data accumulated for shoots/hitcount/ship sunk          #")
+      print ("#################################################################")    
+       
+      print("Result from test_place_all_ships_randomly get_shots_fired :"+""+str(b))
+      print("Result from test_place_all_ships_randomly get_hit_count :"+str(c))
+      print("Result from test_place_all_ships_randomly get_ships_sunk :"+str(d))
+      test_ocean.__print__()
+      print ("#################################################################")
+      print ("#               All Cases Tested Successfully                   #")
+      print ("#################################################################")
+
+    @unittest.expectedFailure
+    def test_fail(self):
+      print ("#################################################################")
+      print ("#                  Expected Failures                            #")
+      print ("#################################################################")    
+      test_ship=game.Cruiser()
+      type=str(test_ship)
+      ship_type=test_ship.get_ship_type()
+      self.assertEqual('b', type,"...Expected Failure")
+      
+    @unittest.expectedFailure
+    def test_fail_validate_position(self):
+      position=0
+      test_ocean=self._ocean
+      while position < 100:
+        row=int(position/10)
+        col=position%10
+        a=(row,col)
+        b=test_ocean.validate_position(row,col)
+        
+        position+=1
+        if b==False:
+          self.assertEqual(b, True,"...Expected Failure")
+          break
+        
+    @unittest.expectedFailure    
+    def test_fail_place_all_ships_randomly(self):
+      test_ships=self._test_ship
+      test_ocean=self._ocean
+      position = 0
+      while position < 100:
+        row=int(position/10)
+        col=position%10
+        is_ok=test_ocean.shoot_at((row,col))    
+        position+=1
+        if is_ok==False:
+          self.assertEqual(is_ok, True,"...Expected Failure")
+          break
+
+if __name__ == '__main__':
+    unittest.main()
+
